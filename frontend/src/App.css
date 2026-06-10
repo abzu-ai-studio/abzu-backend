@@ -1,0 +1,156 @@
+/* App.css - التوزيع الهيكلي الشامل والمظهر الفاخر الكامل لمنصة ABZU */
+
+:root {
+  --color-bazalt: #12161A;       /* لون صخور البازلت الأسود الفاخر */
+  --color-lapis: #004BFF;        /* لون الأزرق اللازوردي الملكي التفاعلي */
+  --color-clay: #FAF6F0;         /* لون الطين الدافئ النقي للخلفية */
+  --color-gold: #D4AF37;         /* لون الذهبي الملكي المطفأ للرموز */
+}
+
+/* تهيئة وتجميد مقاسات المتصفح بالكامل لمنع أي عشوائية */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-clay);
+  color: var(--color-bazalt);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* حاوية التوزيع الكبرى: تقسم الشاشة لنصفين (أرشيف على اليسار، ومساحة عمل ممتدة على اليمين) */
+.abzu-layout-container {
+  display: flex;
+  flex-direction: row-reverse; /* تضمن توافق الترتيب من اليمين لليسار للغة العربية */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* الجانب الأيمن الكلي: مساحة العمل وصندوق الأوامر */
+.min-h-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+  background-color: var(--color-clay);
+  position: relative;
+}
+
+/* الجانب الأيسر الكلي: الشريط الجانبي الحجري الحاد (الزقورة) */
+.abzu-sidebar {
+  width: 320px;
+  height: 100vh;
+  background-color: var(--color-bazalt);
+  color: #FAF6F0;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+  box-sizing: border-box;
+  z-index: 20;
+}
+
+/* تنسيق بطاقات الأرشيف المتدرجة بأسلوب العمارة الهرمية للزقورة */
+.ziggurat-layer-item {
+  padding: 16px;
+  margin-top: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: transparent;
+  color: white;
+  text-align: right;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ziggurat-layer-item:hover, .ziggurat-layer-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-lapis);
+}
+
+/* لوح مخرجات وبطاقات الذكاء الاصطناعي البازلتية الفخمة في المنتصف */
+.bg-\[\#12161A\] {
+  background-color: var(--color-bazalt) !important;
+  color: #FAF6F0 !important;
+  width: 100%;
+  max-width: 800px;
+  padding: 24px;
+  border: 1px solid rgba(0, 75, 255, 0.2) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  text-align: right;
+  margin: 20px auto;
+}
+
+/* صندوق الأوامر الحي الممتد في أسفل الشاشة */
+.max-w-4xl {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border: 1px solid rgba(18, 22, 26, 0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 16px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: transparent;
+  resize: none;
+}
+
+/* ترتيب الهيدر والشريط السفلي لصندوق الإدخال */
+.border-b {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(18, 22, 26, 0.05);
+  width: 100%;
+}
+
+.border-t {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: rgba(250, 246, 240, 0.5);
+  border-top: 1px solid rgba(18, 22, 26, 0.05);
+}
+
+button {
+  background: var(--color-bazalt);
+  color: var(--color-gold);
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover {
+  background: var(--color-lapis);
+  color: white;
+}
+
+/* أنيميشن النقش الليزري والظهور التدريجي الفاخر */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 1.2s ease-out forwards;
+}
+
+/* إخفاء أشرطة التصفح والحفاظ على نقاء الواجهة */
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
