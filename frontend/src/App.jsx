@@ -1,8 +1,9 @@
+// App.jsx - واجهة الإنتاج الكاملة لمنصة ABZU المصلحة لتخطي حظر المتصفحات (CORS Bypass)
 import React, { useState } from 'react';
 import AbzuStoryIntro from './components/AbzuStoryIntro';
 import AbzuSidebar from './components/AbzuSidebar';
 import AbzuPromptBox from './components/AbzuPromptBox';
-import AbzuEditableSlate from './components/AbzuEditableSlate'; // استدعاء المحرر المدمج الجديد
+import AbzuEditableSlate from './components/AbzuEditableSlate';
 
 export default function App() {
   const [isStoryFinished, setIsStoryFinished] = useState(false);
@@ -15,20 +16,32 @@ export default function App() {
     setAiResponse('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/prompt', {
+      // حقن الرابط السحابي مع إضافة بروتوكولات العبور الصارمة لتفادي حظر المتصفحات
+      const response = await fetch('https://onrender.com', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: text }),
+        mode: 'cors', // ✅ إجبار المتصفح على تشغيل وضع العبور المفتوح
+        // امسح الـ headers القديمة وضَعْ مكانها هذه الشفرة الشاملة للإنتاج:
+headers: { 
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Access-Control-Allow-Origin': '*' // ✅ حقن العبور العالمي المباشر
+},
+
+        body: JSON.stringify({ 
+          prompt: text,
+          layer: currentLayer
+        }),
       });
 
       const data = await response.json();
       if (data.success) {
         setAiResponse(data.response);
       } else {
-        setAiResponse(data.error || "فشل بروتوكول النقش المعرفي.");
+        setAiResponse(data.error || "فشل بروتوكول النقش المعرفي السحابي.");
       }
     } catch (error) {
-      setAiResponse("// ⚠️ خطأ: تأكد من تشغيل سيرفر الباك إند الخلفي بنجاح في الترمينال الأول.");
+      console.error("🔴 خطأ في الاتصال بالخادم السحابي:", error);
+      setAiResponse("// ⚠️ خطأ في الاتصال السحابي: تعذر الوصول لنواة ABZU أونلاين. تأكد من استقرار خادم Render.");
     } finally {
       setIsLoading(false);
     }
@@ -42,23 +55,20 @@ export default function App() {
       {isStoryFinished && (
         <div className="abzu-layout-container animate-fade-in">
           
-          {/* مساحة العمل والإنتاجية (الجانب الأيمن) */}
           <div className="min-h-screen">
             
-            {/* الهيدر العلوي */}
             <div className="border-b">
-              <div style={{ fontSize: '11px', color: 'rgba(18,22,26,0.4)', fontFamily: 'monospace' }}>WORKSPACE // CORE_NODE // ONLINE</div>
+              <div style={{ fontSize: '11px', color: 'rgba(18,22,26,0.4)', fontFamily: 'monospace' }}>WORKSPACE // CORE_NODE // LIVE_CLOUD</div>
               <div style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(18,22,26,0.8)' }}>
-                لوح المعرفة: <span style={{ color: '#004BFF', fontWeight: 'bold' }}>LAYER 0{currentLayer}</span>
+                لوح المعرفة الحالي: <span style={{ color: '#004BFF', fontWeight: 'bold' }}>LAYER 0{currentLayer}</span>
               </div>
             </div>
 
-            {/* منطقة تيار المخرجات - استدعاء اللوح المدمج المطور */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', overflowY: 'auto', margin: '10px 0' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyProject: 'center', overflowY: 'auto', margin: '10px 0' }}>
               
               {isLoading && (
                 <div style={{ textAlign: 'center', color: '#D4AF37', fontFamily: 'monospace', fontSize: '12px' }} className="animate-pulse">
-                  [جاري نقش شفرتك على الألواح الرقمية لـ ABZU...]
+                  [جاري نقش شفرتك على الألواح الرقمية لـ ABZU أونلاين...]
                 </div>
               )}
 
@@ -71,12 +81,10 @@ export default function App() {
 
             </div>
 
-            {/* صندوق الأوامر الحي في الأسفل */}
             <AbzuPromptBox onSendPrompt={handleSendPromptToServer} isLoading={isLoading} />
 
           </div>
 
-          {/* الشريط الجانبي الأرشيفي (الزقورة) مستقر بثبات على اليسار */}
           <AbzuSidebar onLayerChange={(id) => setCurrentLayer(id)} />
 
         </div>
