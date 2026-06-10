@@ -1,4 +1,4 @@
-// AbzuPromptBox.jsx - النسخة النهائية المنسقة والمصلحة لصندوق الأوامر
+// AbzuPromptBox.jsx - النسخة الاحترافية النهائية لـ ABZU المصلحة لمنع إعادة تشغيل الموقع
 import React, { useState } from 'react';
 import playAbzuSound from './AbzuAudioEngine.js';
 
@@ -14,22 +14,28 @@ export default function AbzuPromptBox({ onSendPrompt, isLoading = false }) {
   };
 
   const handleKeyPress = (e) => {
+    // كسر السلوك الافتراضي للمتصفح عند الضغط على Enter لمنع الـ Page Reload
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+      e.preventDefault(); 
       executeAction();
     }
   };
 
   const executeAction = () => {
     if (!promptText.trim() || isLoading) return;
+    
     playAbzuSound('seal-secure', 0.4); 
-    if (onSendPrompt) onSendPrompt(promptText);
-    setPromptText(''); 
+    
+    if (onSendPrompt) {
+      onSendPrompt(promptText); // تمرير الأمر للسيرفر السحابي بأمان دون انقطاع
+    }
+    setPromptText(''); // تصفية صندوق النص
   };
 
   return (
     <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto', background: 'white', border: isFocused ? '1px solid #004BFF' : '1px solid rgba(18, 22, 26, 0.1)', boxShadow: isFocused ? '0 0 20px rgba(0,75,255,0.1)' : 'none', transition: 'all 0.3s' }}>
       
+      {/* حقن الـ OnKeyDown لمنع خروج المتصفح للبداية */}
       <textarea
         value={promptText}
         onChange={handleInputChange}
@@ -41,15 +47,20 @@ export default function AbzuPromptBox({ onSendPrompt, isLoading = false }) {
         style={{ width: '100%', border: 'none', outline: 'none', padding: '16px', fontSize: '15px', boxSizing: 'border-box', background: 'transparent', resize: 'none', height: '80px', textAlign: 'right' }}
       />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', backgroundColor: 'rgba(250, 246, 240, 0.5)', borderTop: '1px solid rgba(18, 22, 26, 0.05)' }}>
+      <div style={{ display: 'flex', justifyProject: 'space-between', alignItems: 'center', padding: '10px 16px', backgroundColor: 'rgba(250, 246, 240, 0.5)', borderTop: '1px solid rgba(18, 22, 26, 0.05)' }}>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: 'rgba(18,12,26,0.4)', fontFamily: 'monospace' }}>
           <span style={{ width: '6px', height: '6px', backgroundColor: isFocused || isLoading ? '#004BFF' : '#cbd5e1', borderRadius: '50%', display: 'inline-block' }}></span>
           <span>CYLINDER_SEAL_ENCRYPTION_SAFE</span>
         </div>
 
+        {/* تعديل نوع الزر وإضافة preventDefault صريح عند الضغط بالفأرة */}
         <button
-          onClick={executeAction}
+          type="button" 
+          onClick={(e) => {
+            e.preventDefault();
+            executeAction();
+          }}
           disabled={!promptText.trim() || isLoading}
           style={{ background: promptText.trim() && !isLoading ? '#12161A' : '#e2e8f0', color: promptText.trim() && !isLoading ? '#D4AF37' : '#94a3b8', border: 'none', padding: '8px 18px', fontWeight: 'bold', cursor: promptText.trim() && !isLoading ? 'pointer' : 'not-allowed', transition: 'all 0.3s' }}
         >

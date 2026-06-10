@@ -1,4 +1,3 @@
-// App.jsx - واجهة الإنتاج الكاملة لمنصة ABZU المصلحة لتخطي حظر المتصفحات (CORS Bypass)
 import React, { useState } from 'react';
 import AbzuStoryIntro from './components/AbzuStoryIntro';
 import AbzuSidebar from './components/AbzuSidebar';
@@ -12,36 +11,33 @@ export default function App() {
   const [currentLayer, setCurrentLayer] = useState(3);
 
   const handleSendPromptToServer = async (text) => {
+    if (isLoading) return;
     setIsLoading(true);
-    setAiResponse('');
+    setAiResponse(''); 
 
     try {
-      // حقن الرابط السحابي مع إضافة بروتوكولات العبور الصارمة لتفادي حظر المتصفحات
       const response = await fetch('https://onrender.com', {
         method: 'POST',
-        mode: 'cors', // ✅ إجبار المتصفح على تشغيل وضع العبور المفتوح
-        // امسح الـ headers القديمة وضَعْ مكانها هذه الشفرة الشاملة للإنتاج:
-headers: { 
-  'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Access-Control-Allow-Origin': '*' // ✅ حقن العبور العالمي المباشر
-},
-
+        mode: 'cors', 
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({ 
           prompt: text,
-          layer: currentLayer
+          layer: currentLayer 
         }),
       });
 
       const data = await response.json();
       if (data.success) {
-        setAiResponse(data.response);
+        setAiResponse(data.response); 
       } else {
         setAiResponse(data.error || "فشل بروتوكول النقش المعرفي السحابي.");
       }
     } catch (error) {
       console.error("🔴 خطأ في الاتصال بالخادم السحابي:", error);
-      setAiResponse("// ⚠️ خطأ في الاتصال السحابي: تعذر الوصول لنواة ABZU أونلاين. تأكد من استقرار خادم Render.");
+      setAiResponse("// ⚠️ خطأ في الاتصال: تعذر الوصول لنواة ABZU أونلاين.");
     } finally {
       setIsLoading(false);
     }
@@ -50,8 +46,10 @@ headers: {
   return (
     <div className="bg-[#FAF6F0] relative select-none" style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
       
+      {/* مقدمة التشويق السينمائي فور الفتح */}
       <AbzuStoryIntro onStoryComplete={() => setIsStoryFinished(true)} />
 
+      {/* مساحة العمل تفتح بثبات بعد انتهاء القصة */}
       {isStoryFinished && (
         <div className="abzu-layout-container animate-fade-in">
           
@@ -64,7 +62,7 @@ headers: {
               </div>
             </div>
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyProject: 'center', overflowY: 'auto', margin: '10px 0' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', overflowY: 'auto', margin: '10px 0' }}>
               
               {isLoading && (
                 <div style={{ textAlign: 'center', color: '#D4AF37', fontFamily: 'monospace', fontSize: '12px' }} className="animate-pulse">
@@ -81,6 +79,7 @@ headers: {
 
             </div>
 
+            {/* صندوق الأوامر الحصين المستدعى مع حظر التحديث */}
             <AbzuPromptBox onSendPrompt={handleSendPromptToServer} isLoading={isLoading} />
 
           </div>
